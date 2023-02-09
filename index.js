@@ -5,9 +5,12 @@ const Recipe = require('./models/Recipe.model');
 // Import of the data from './data.json'
 const data = require('./data');
 
-const MONGODB_URI = 'mongodb://localhost:27017/recipe-app';
+const MONGODB_URI = 'mongodb://127.0.0.1:27017/recipe-app';
 
 //Method 1 : Using Async Await
+
+
+
 
 const manageRecipes = async () => {
   try {
@@ -19,6 +22,26 @@ const manageRecipes = async () => {
     await Recipe.deleteMany();
 
     // Run your code here, after you have insured that the connection was made
+    // add a new recipe
+    const bolonhese = ({title: 'Spaghetti Bolonhese', level: 'Easy Peasy', cuisine: 'italian', });
+    await Recipe.create(bolonhese);
+    console.log(bolonhese.title);
+
+    // insert multiple recipes
+    await Recipe.insertMany(data);
+    data.forEach(recipes => console.log(recipes.title));
+   
+    // update recipe
+    await Recipe.findOneAndUpdate({title: 'Rigatoni alla Genovese'}, {duration: 100});
+    console.log('Success!!');
+
+    // remove a recipe
+    await Recipe.deleteOne({title: 'Carrot Cake'});
+    console.log('Carrot Cake unvailable');
+
+    mongoose.disconnect();
+    
+
   } catch (error) {
     console.log(error);
   }
